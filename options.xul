@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <!-- TODO: Localize -->
+    <setting pref="extensions.copyurlwithhash.elementBlacklist" type="string" title="Element Blacklist:">Space-separated list of elements to ignore when looking for an id.</setting>
+    <setting pref="extensions.copyurlwithhash.elementWhitelist" type="string" title="Element Whitelist:">Space-separated list of elements to use when looking for an id. Set to "" (empty string) to disable whitelist.</setting>
+    <setting pref="extensions.copyurlwithhash.ignoreAjaxPages" type="bool" title="Ignore AJAX Pages:">Disable on pages that use "#!" in their URLs, as these hashes don't usually refer to any specific place on the page, and the page's content is usually loaded via AJAX based on the hash.</setting>
+    <setting pref="extensions.copyurlwithhash.maxHeightDifference" type="integer" title="Maxium Height Difference:">Maxium difference in height (in pixels) between the right-clicked element and the nearest parent with an id. Set to -1 to disable.</setting>
+</vbox>
