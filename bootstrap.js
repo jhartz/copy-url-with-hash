@@ -35,8 +35,8 @@ Cu.import("resource://gre/modules/AddonManager.jsm");
 
 // Pref access
 var prefs = Services.prefs.getBranch("extensions.copyurlwithhash.");
-// Filled with localized version so we can use it as context menu label
-var ADDON_NAME;
+// String access
+var strings;
 // Set to an instance of nsIClipboardHelper when we need it
 var clipboardHelper;
 
@@ -46,30 +46,25 @@ function install(data, reason) {}
 function uninstall(data, reason) {}
 
 function startup(data, reason) {
-    AddonManager.getAddonByID("copyurlwithhash@jhartz.github.io", function (addon) {
-        // Get localized name of add-on
-        ADDON_NAME = addon.name;
-        
-        // Set default prefs (NOTE: not user prefs)
-        try {
-            var branch = Services.prefs.getDefaultBranch("");
-            branch.setCharPref("extensions.copyurlwithhash.elementBlacklist", "header footer body");
-            branch.setCharPref("extensions.copyurlwithhash.elementWhitelist", Services.appinfo.ID == "{aa3c5121-dab2-40e2-81ca-7ea25febc110}" ? "h1 h2 h3 h4 h5 h6 a img" : "");  // (different default for Firefox Mobile)
-            branch.setBoolPref("extensions.copyurlwithhash.ignoreAjaxPages", true);
-            branch.setIntPref("extensions.copyurlwithhash.maxHeightDifference", 200);
-        } catch (err) {
-            Cu.reportError(err);
-        }
-        
-        // Load into all existing browser windows
-        var enumerator = Services.wm.getEnumerator("navigator:browser");
-        while (enumerator.hasMoreElements()) {
-            loadWindow(enumerator.getNext());
-        }
-        
-        // Listen for new windows
-        Services.ww.registerNotification(windowWatcher);
-    });
+    // Set default prefs (NOTE: not user prefs)
+    try {
+        var branch = Services.prefs.getDefaultBranch("");
+        branch.setCharPref("extensions.copyurlwithhash.elementBlacklist", "header footer body");
+        branch.setCharPref("extensions.copyurlwithhash.elementWhitelist", Services.appinfo.ID == "{aa3c5121-dab2-40e2-81ca-7ea25febc110}" ? "h1 h2 h3 h4 h5 h6 a img" : "");  // (different default for Firefox Mobile)
+        branch.setBoolPref("extensions.copyurlwithhash.ignoreAjaxPages", true);
+        branch.setIntPref("extensions.copyurlwithhash.maxHeightDifference", 200);
+    } catch (err) {
+        Cu.reportError(err);
+    }
+    
+    // Load into all existing browser windows
+    var enumerator = Services.wm.getEnumerator("navigator:browser");
+    while (enumerator.hasMoreElements()) {
+        loadWindow(enumerator.getNext());
+    }
+    
+    // Listen for new windows
+    Services.ww.registerNotification(windowWatcher);
 }
 
 function shutdown(data, reason) {
@@ -107,7 +102,7 @@ function loadWindow(win) {
             // Firefox Desktop
             var menuitem = win.document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "menuitem");
             menuitem.id = "copyurlwithhash_menuitem";
-            menuitem.setAttribute("label", ADDON_NAME);
+            menuitem.setAttribute("label", getString("contextmenu_label"));
             menuitem.setAttribute("hidden", true);
             menuitem.addEventListener("command", onCommand, false);
             win.document.getElementById("contentAreaContextMenu").insertBefore(menuitem, win.document.getElementById("context-sep-stop") || null);
@@ -120,7 +115,7 @@ function loadWindow(win) {
             win.document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", onPopupShowing, false);
         } else if (win.NativeWindow && win.NativeWindow.contextmenus) {
             // Firefox Mobile
-            win._COPYURLWITHHASH_MENUID = win.NativeWindow.contextmenus.add(ADDON_NAME, {
+            win._COPYURLWITHHASH_MENUID = win.NativeWindow.contextmenus.add(getString("contextmenu_label"), {
                 matches: function (elem) {
                     var status;
                     if (status = checkNode(elem)) {
@@ -161,6 +156,11 @@ function unloadWindow(win) {
 }
 
 /* CROSS-PLATFORM FUNCTIONS */
+
+function getString(name, formats) {
+    if (!strings) strings = Services.strings.createBundle("chrome://copyurlwithhash/locale/main.properties");
+    return formats ? strings.formatStringFromName(name, formats, formats.length) : strings.GetStringFromName(name);
+}
 
 function findTop(elem) {
     var top = 0;
@@ -223,7 +223,7 @@ function checkNode(elem) {
             if (url.indexOf("#") != -1) url = url.substring(0, url.indexOf("#"));
             url += "#" + encodeURIComponent(anchor);
             
-            return [url, "#" + anchor + (diff > 0 ? " (" + diff + "px off)" : "")];
+            return [url, "#" + anchor + (diff > 0 ? ("  " + getString("pxoff", [diff])) : "")];
         }
     }
     
