@@ -74,8 +74,8 @@ var windowWatcher = function windowWatcher(win, topic) {
 }
 
 function loadWindow(win) {
-    if (!win._COPYURLWITHHASH_LOADED) {
-        win._COPYURLWITHHASH_LOADED = true;
+    if (!win._COPYURLWITHHASH) {
+        win._COPYURLWITHHASH = {};
         
         if (win.document.getElementById("contentAreaContextMenu")) {
             // Firefox Desktop
@@ -94,18 +94,18 @@ function loadWindow(win) {
             win.document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", onPopupShowing, false);
         } else if (win.NativeWindow && win.NativeWindow.contextmenus) {
             // Firefox Mobile
-            win._COPYURLWITHHASH_MENUID = win.NativeWindow.contextmenus.add(getString("contextmenu_label"), {
+            win._COPYURLWITHHASH.menuid = win.NativeWindow.contextmenus.add(getString("contextmenu_label"), {
                 matches: function (elem) {
                     var status;
                     if (status = checkNode(elem)) {
-                        win._COPYURLWITHHASH_URL = status[0];
+                        win._COPYURLWITHHASH.url = status[0];
                         return true;
                     } else {
                         return false;
                     }
                 }
             }, function () {
-                if (win._COPYURLWITHHASH_URL) copyURL(win._COPYURLWITHHASH_URL);
+                if (win._COPYURLWITHHASH.url) copyURL(win._COPYURLWITHHASH.url);
             });
         }
         
@@ -114,9 +114,7 @@ function loadWindow(win) {
 }
 
 function unloadWindow(win) {
-    if (win._COPYURLWITHHASH_LOADED) {
-        win._COPYURLWITHHASH_LOADED = false;
-        
+    if (win._COPYURLWITHHASH) {
         if (win.document.getElementById("contentAreaContextMenu")) {
             // Firefox Desktop
             win.document.getElementById("contentAreaContextMenu").removeEventListener("popupshowing", onPopupShowing, false);
@@ -127,10 +125,12 @@ function unloadWindow(win) {
             var menuitem = win.document.getElementById("copyurlwithhash_menuitem");
             menuitem.removeEventListener("command", onCommand, false);
             menuitem.parentNode.removeChild(menuitem);
-        } else if (win.NativeWindow && win.NativeWindow.contextmenus && typeof win._COPYURLWITHHASH_MENUID != "undefined") {
+        } else if (win.NativeWindow && win.NativeWindow.contextmenus && typeof win._COPYURLWITHHASH.menuid != "undefined") {
             // Firefox Mobile
-            win.NativeWindow.contextmenus.remove(win._COPYURLWITHHASH_MENUID);
+            win.NativeWindow.contextmenus.remove(win._COPYURLWITHHASH.menuid);
         }
+        
+        delete win._COPYURLWITHHASH;
     }
 }
 
