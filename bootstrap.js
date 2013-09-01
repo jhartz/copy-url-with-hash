@@ -151,6 +151,7 @@ function findTop(elem) {
 
 function checkNode(elem) {
     if (!elem || !elem.ownerDocument || !elem.ownerDocument.defaultView) return false;
+    
     var contentWindow = elem.ownerDocument.defaultView;
     if (!prefs.getBoolPref("ignoreAjaxPages") || contentWindow.location.hash.substring(0, 2) != "#!") {
         var origElem = elem;
