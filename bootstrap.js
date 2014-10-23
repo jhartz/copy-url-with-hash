@@ -4,6 +4,9 @@
     that can be found in the README.md file.
 */
 
+var FIRSTRUN_URL = "https://jhartz.github.io/copy-url-with-hash/welcome.html";
+
+
 var Cc = Components.classes;
 var Ci = Components.interfaces;
 var Cu = Components.utils;
@@ -11,12 +14,14 @@ var Cu = Components.utils;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/AddonManager.jsm");
 
+
 // Pref access
 var prefs = Services.prefs.getBranch("extensions.copyurlwithhash.");
 // String access
 var strings;
 // Set to an instance of nsIClipboardHelper when we need it
 var clipboardHelper;
+
 
 /* BOOTSTRAP CODE */
 
@@ -43,6 +48,16 @@ function startup(data, reason) {
     
     // Listen for new windows
     Services.ww.registerNotification(windowWatcher);
+    
+    // First run stuff
+    if (reason == ADDON_INSTALL) {
+        let win = Services.wm.getMostRecentWindow("navigator:browser");
+        if (win && win.BrowserApp) {
+            win.BrowserApp.addTab(FIRSTRUN_URL);
+        } else if (win && win.gBrowser) {
+            win.gBrowser.selectedTab = win.gBrowser.addTab(FIRSTRUN_URL);
+        }
+    }
 }
 
 function shutdown(data, reason) {
