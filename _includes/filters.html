@@ -1,0 +1,32 @@
+{% comment %}
+
+This script filters out certain elements based on whether this is a desktop or mobile device.
+This can be used to cater directions to the device that the user is using.
+
+For example:
+
+    Just <span class="filter_desktop">right-click</span><span class="filter_filler"> or </span><span class="filter_mobile">long-press</span> anywhere on a webpage...
+
+In this example, "right-click" would only be shown if the user is on a desktop device and "long-press" would only be shown if the user is on a mobile device. The "or" in between will not be shown on either; it is only there in case the user does not have JavaScript enabled.
+
+For best performance, this include MUST go AFTER any content that contans elements to be filtered.
+
+{% endcomment %}<script type="text/javascript">
+function checkFilters() {
+    var hide = function (elems) {
+        for (var i = 0; i < elems.length; i++) {
+            elems[i].style.display = "none";
+        }
+    };
+    if (typeof document.getElementsByClassName == "function") {
+        hide(document.getElementsByClassName("filter_filler"));
+        if (navigator.userAgent.toLowerCase().indexOf("mobi") != -1) {
+            hide(document.getElementsByClassName("filter_desktop"));
+        } else {
+            hide(document.getElementsByClassName("filter_mobile"));
+        }
+    }
+};
+window.onload = checkFilters;
+checkFilters();
+</script>

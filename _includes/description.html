@@ -1,20 +1,3 @@
-<script type="text/javascript">
-window.onload = function () {
-    var hide = function (elems) {
-        for (var i = 0; i < elems.length; i++) {
-            elems[i].style.display = "none";
-        }
-    };
-    if (typeof document.getElementsByClassName == "function") {
-        hide(document.getElementsByClassName("filter_filler"));
-        if (navigator.userAgent.toLowerCase().indexOf("mobi") != -1) {
-            hide(document.getElementsByClassName("filter_desktop"));
-        } else {
-            hide(document.getElementsByClassName("filter_mobile"));
-        }
-    }
-};
-</script>
 <p><em>Copy URL With Hash</em> is a Firefox add-on to copy a page's URL with a hash at the end that identifies the location on the page.</p>
 
 <h2 id="HowItWorks">How It Works</h2>
