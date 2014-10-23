@@ -195,11 +195,14 @@ function checkNode(elem) {
                     
         }
         
+        let max, diff;
         if (elem) {
-            let max = prefs.getIntPref("maxHeightDifference"), diff = Math.abs(findTop(elem) - findTop(origElem));
+            max = prefs.getIntPref("maxHeightDifference");
+            diff = Math.abs(findTop(elem) - findTop(origElem));
             if (max >= 0 && diff > max) elem = null;
         }
         
+        // Make sure we still exist
         if (elem) {
             let anchor = elem.id || elem.getAttribute("name");
             
