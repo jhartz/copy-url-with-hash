@@ -88,11 +88,18 @@ function loadWindow(win) {
             win.document.getElementById("contentAreaContextMenu").insertBefore(menuitem, beforeItem);
             
             if (beforeItem) {
+                // <menuseparator> above our <menuitem>
                 let menuseparator = win.document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "menuseparator");
-                menuseparator.id = "copyurlwithhash_menuseparator";
+                menuseparator.id = "copyurlwithhash_menuseparator_below";
                 menuseparator.setAttribute("hidden", true);
                 win.document.getElementById("contentAreaContextMenu").insertBefore(menuseparator, beforeItem);
             }
+            
+            // <menuseparator> below our <menuitem>
+            let menuseparator = win.document.createElementNS("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul", "menuseparator");
+            menuseparator.id = "copyurlwithhash_menuseparator_above";
+            menuseparator.setAttribute("hidden", true);
+            win.document.getElementById("contentAreaContextMenu").insertBefore(menuseparator, menuitem);
             
             win.document.getElementById("contentAreaContextMenu").addEventListener("popupshowing", onPopupShowing, false);
         } else if (win.NativeWindow && win.NativeWindow.contextmenus) {
@@ -121,13 +128,17 @@ function unloadWindow(win) {
         if (win.document.getElementById("contentAreaContextMenu")) {
             // Firefox Desktop
             win.document.getElementById("contentAreaContextMenu").removeEventListener("popupshowing", onPopupShowing, false);
+            let elem;
             
-            let menuseparator = win.document.getElementById("copyurlwithhash_menuseparator");
-            menuseparator.parentNode.removeChild(menuseparator);
+            elem = win.document.getElementById("copyurlwithhash_menuseparator_above");
+            elem.parentNode.removeChild(elem);
             
-            let menuitem = win.document.getElementById("copyurlwithhash_menuitem");
-            menuitem.removeEventListener("command", onCommand, false);
-            menuitem.parentNode.removeChild(menuitem);
+            elem = win.document.getElementById("copyurlwithhash_menuseparator_below");
+            elem.parentNode.removeChild(elem);
+            
+            elem = win.document.getElementById("copyurlwithhash_menuitem");
+            elem.removeEventListener("command", onCommand, false);
+            elem.parentNode.removeChild(elem);
         } else if (win.NativeWindow && win.NativeWindow.contextmenus && typeof win._COPYURLWITHHASH.menuid != "undefined") {
             // Firefox Mobile
             win.NativeWindow.contextmenus.remove(win._COPYURLWITHHASH.menuid);
@@ -226,23 +237,43 @@ function copyURL(url) {
 /* FF DESKTOP FUNCTIONS */
 
 function onPopupShowing(event) {
-    let menupopup = event.originalTarget, status;
-    if (menupopup.triggerNode && (status = checkNode(menupopup.triggerNode))) {
+    let menupopup = event.originalTarget, elem, status;
+    if ((elem = menupopup.triggerNode) && (status = checkNode(elem))) {
+        let win = menupopup;
+        while (win.parentNode) win = win.parentNode;
+        win = win && win.defaultView;
+        
         let [url, tooltip] = status;
         let menuitem = menupopup.querySelector("#copyurlwithhash_menuitem");
         menuitem.setAttribute("hidden", false);
         menuitem.setAttribute("data-url", url);
         menuitem.setAttribute("tooltiptext", tooltip);
-        menupopup.querySelector("#copyurlwithhash_menuseparator").setAttribute("hidden", false);
+        
+        // Now... which separators should we show?
+        let showTop, showBottom;
+        if (elem instanceof Ci.nsIDOMHTMLAnchorElement && elem.hasAttribute("href")) {
+            // Links (with a "href"): show both
+            showTop = showBottom = true;
+        } else {
+            // Input element, text selection: only show bottom
+            // Images, anything else: only show top
+            showBottom = (
+                (elem instanceof Ci.nsIDOMHTMLTextAreaElement) ||
+                (elem instanceof Ci.nsIDOMHTMLInputElement && elem.mozIsTextField(false)) ||
+                (win && win.getBrowserSelection())
+            );
+            showTop = !showBottom;
+        }
+        menupopup.querySelector("#copyurlwithhash_menuseparator_above").setAttribute("hidden", !showTop);
+        menupopup.querySelector("#copyurlwithhash_menuseparator_below").setAttribute("hidden", !showBottom);
     } else {
         menupopup.querySelector("#copyurlwithhash_menuitem").setAttribute("hidden", true);
-        menupopup.querySelector("#copyurlwithhash_menuseparator").setAttribute("hidden", true);
+        menupopup.querySelector("#copyurlwithhash_menuseparator_above").setAttribute("hidden", true);
+        menupopup.querySelector("#copyurlwithhash_menuseparator_below").setAttribute("hidden", true);
     }
 }
 
 function onCommand(event) {
-    let menuitem = event.originalTarget;
-    if (menuitem.getAttribute("data-url")) {
-        copyURL(menuitem.getAttribute("data-url"));
-    }
+    let url = event.originalTarget.getAttribute("data-url");
+    if (url) copyURL(url);
 }
