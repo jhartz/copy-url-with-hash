@@ -8,6 +8,23 @@ prettynav:
   - pre: View on
     text: GitHub
     url: https://github.com/jhartz/copy-url-with-hash
+
+shadowbox: 1
+
+# For use below (easier to write it out here)
+screenshots:
+  - url: screenshots/windows.png
+    thumburl: screenshots/windows-thumb.png
+    id: WindowsScreenshot
+    caption: Copy URL With Hash in Firefox on Windows
+  - url: screenshots/mac.png
+    thumburl: screenshots/mac-thumb.png
+    id: MacScreenshot
+    caption: Copy URL With Hash in Firefox on Mac OS X
+  - url: screenshots/android.png
+    thumburl: screenshots/android-thumb.png
+    id: AndroidScreenshot
+    caption: Copy URL With Hash in Firefox on Android
 ---
     <h2 id="About">About</h2>
 {% include description.html %}
@@ -27,6 +44,14 @@ prettynav:
     <h2 id="ReportingIssues">Reporting Issues</h2>
 
     <p>If you find an issues with <em>Copy URL With Hash</em>, please <a href="https://github.com/jhartz/copy-url-with-hash/issues">file an issue report on GitHub</a>.</p>
+
+    <h2 id="Screenshots">Screenshots</h2>
+
+    <p>Click on an image to view a larger, more detailed version.</p>
+
+{% assign gallery = 'Screenshots' %}{% assign imagegallery = page.screenshots %}{% include imagegallery.html %}
+
+    <p class="license"><a href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width: 0;" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png"></a><br>All screenshots are licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</p>
 
     <h2 id="Development">Development</h2>
 
