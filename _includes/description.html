@@ -8,9 +8,9 @@ window.onload = function () {
     if (typeof document.getElementsByClassName == "function") {
         hide(document.getElementsByClassName("filter_filler"));
         if (navigator.userAgent.toLowerCase().indexOf("mobi") != -1) {
-            hide(document.getElementsByClassName("filter_mobile"));
-        } else {
             hide(document.getElementsByClassName("filter_desktop"));
+        } else {
+            hide(document.getElementsByClassName("filter_mobile"));
         }
     }
 };
