@@ -1,0 +1,86 @@
+{
+    "extensionName": {
+        "message": "Copy URL With Hash",
+        "description": "name of the extension"
+    },
+
+    "extensionDescription": {
+        "message": "Copy a page's URL with a hash at the end that identifies the location on the page",
+        "description": "description of the extension"
+    },
+
+    "optionsTitle": {
+        "message": "Copy URL With Hash options",
+        "description": "title for the options page"
+    },
+
+    "aboutOrHelp": {
+        "message": "About/Help",
+        "description": "label for the About/Help link in the options"
+    },
+
+    "menuButtonLabel": {
+        "message": "Copy Page URL With Hash",
+        "description": "label for the context menu button"
+    },
+
+    "noNearbyElementError": {
+        "message": "No element near this one has an ID or name",
+        "description": "error message for when there is no nearby element with an ID or name"
+    },
+
+    "otherError": {
+        "message": "Error finding page element",
+        "description": "error message for unexpected situations"
+    },
+
+    "elementBlacklistLabel": {
+        "message": "Element blacklist:",
+        "description": "title of the \"element blacklist\" option"
+    },
+
+    "elementBlacklistDescription": {
+        "message": "Space-separated list of elements to ignore when looking for an id.",
+        "description": "description of the \"element blacklist\" option"
+    },
+
+    "elementWhitelistLabel": {
+        "message": "Element whitelist:",
+        "description": "title of the \"element whitelist\" option"
+    },
+
+    "elementWhitelistDescription": {
+        "message": "Space-separated list of elements to use when looking for an id. Set to empty string (nothing) to disable whitelist.",
+        "description": "description of the \"element whitelist\" option"
+    },
+
+    "maximumLocationDifferenceLabel": {
+        "message": "Maximum vertical location difference:",
+        "description": "title of the \"maximum location difference\" option"
+    },
+
+    "maximumLocationDifferenceDescription": {
+        "message": "Maximum vertical location difference (in pixels) between the right-clicked element and the nearest parent with an id. Set to -1 to disable.",
+        "description": "description of the \"maximum location difference\" option"
+    },
+
+    "maximumLocationDifferenceUnit": {
+        "message": "pixels",
+        "description": "unit for the \"maximum location difference\" option (pixels)"
+    },
+
+    "save": {
+        "message": "Save",
+        "description": "label for the save button in the options"
+    },
+
+    "errorRestoringOptions": {
+        "message": "Error restoring options",
+        "description": "error message shown when there is an error restoring the options"
+    },
+
+    "errorSavingOptions": {
+        "message": "Error saving options",
+        "description": "error message shown when there is an error saving the options"
+    }
+}
