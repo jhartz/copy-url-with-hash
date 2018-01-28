@@ -1,1 +1,5 @@
 _layouts
+browser-polyfill.min.js
+browser-polyfill.min.js.map
+copy-url-with-hash-webext.xpi
+copy-url-with-hash-chrome.zip
