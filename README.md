@@ -2,11 +2,15 @@
 
 **Copy URL With Hash** is a Firefox add-on to copy a page's URL with a hash at the end that identifies the location on the page.
 
-For more info, see http://jhartz.github.io/copy-url-with-hash/
+For more info, see https://jhartz.github.io/copy-url-with-hash/
+
+## Requirements
+
+At least Firefox 52 (for async-await support)
 
 ## License
 
-    Copyright (c) 2013, Jake Hartz
+    Copyright (c) 2018, Jake Hartz
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without

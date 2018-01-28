@@ -1,0 +1,41 @@
+{
+    "manifest_version": 2,
+    "version": "2.0.0",
+    "applications": {
+        "gecko": {
+            "id": "copyurlwithhash@jhartz.github.io",
+            "strict_min_version": "52.0"
+        }
+    },
+
+    "name": "__MSG_extensionName__",
+    "description": "__MSG_extensionDescription__",
+    "default_locale": "en",
+
+    "homepage_url": "https://jhartz.github.io/copy-url-with-hash/",
+
+    "permissions": [
+        "activeTab",
+        "contextMenus",
+        "clipboardWrite",
+        "storage"
+    ],
+
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": ["content-utils.js", "OPTIONS.js", "content.js"]
+        }
+    ],
+
+    "options_ui": {
+        "page": "options-page.html",
+        "browser_style": true
+    }
+}
